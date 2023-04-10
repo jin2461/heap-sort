@@ -138,11 +138,10 @@ fn main() {
     fn max_heap(mut vec_of_nodes: Vec<Node>) -> Vec<Node> {
         let last_subtree: f32 = (vec_of_nodes.len() / 2) as f32;
         let last_subtree_int = last_subtree.floor() as i32;
-        for i in 0..last_subtree_int - 1 {
+        for i in (0..last_subtree_int).rev() {
             let ii = i as usize;
             vec_of_nodes = hepify(vec_of_nodes, ii)
         }
-        println!("{last_subtree_int}");
         return vec_of_nodes;
     }
     // for Node in &nodes {
