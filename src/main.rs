@@ -115,18 +115,23 @@ fn main() {
         }
     }
     fn hepify(mut vec_of_nodes: Vec<Node>, i: usize) -> Vec<Node> {
+        // for Node in &vec_of_nodes {
+        //     println!(
+        //         "parant = {}, child1 = {}, child 2 = {}, value = {}",
+        //         Node.parent, Node.child1, Node.child2, Node.value
+        //     );
+        // }
+
         let mut largest: usize = i;
-        let len = vec_of_nodes.len();
-        println!("{len}");
-        if vec_of_nodes.len() >= vec_of_nodes[i].child1 {
+        if vec_of_nodes.len() > vec_of_nodes[i].child1 {
             if vec_of_nodes[i].value < vec_of_nodes[vec_of_nodes[i].child1].value
-                && vec_of_nodes[i].child1 != 0
+                && !(vec_of_nodes[i].child1 == 0)
             {
                 largest = vec_of_nodes[i].child1
             }
             if vec_of_nodes.len() > vec_of_nodes[i].child2 {
                 if vec_of_nodes[largest].value < vec_of_nodes[vec_of_nodes[i].child2].value
-                    && vec_of_nodes[i].child2 != 0
+                    && !(vec_of_nodes[i].child2 == 0)
                 {
                     largest = vec_of_nodes[i].child2
                 }
@@ -153,9 +158,13 @@ fn main() {
     }
     fn sort(mut vec_of_nodes: Vec<Node>) -> Vec<i32> {
         let mut sorted_nodes: Vec<i32> = vec![];
-        for i in 0..vec_of_nodes.len() {
+        let len2 = vec_of_nodes.len();
+        for i in 0..len2 {
             let len = vec_of_nodes.len() - 1;
-            vec_of_nodes.swap(0, len);
+            let placeholder = vec_of_nodes[0].value;
+            vec_of_nodes[0].value = vec_of_nodes[len].value;
+            vec_of_nodes[len].value = placeholder;
+            // vec_of_nodes.swap(0, len);
             let removed_element = vec_of_nodes[len].value;
             vec_of_nodes.remove(len);
             sorted_nodes.push(removed_element);
@@ -166,7 +175,7 @@ fn main() {
             //     );
             // }
 
-            if len > 0 {
+            if len >= 1 {
                 vec_of_nodes = hepify(vec_of_nodes, 0);
             }
         }
