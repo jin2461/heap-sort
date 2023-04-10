@@ -116,15 +116,21 @@ fn main() {
     }
     fn hepify(mut vec_of_nodes: Vec<Node>, i: usize) -> Vec<Node> {
         let mut largest: usize = i;
-        if vec_of_nodes[i].value < vec_of_nodes[vec_of_nodes[i].child1].value
-            && vec_of_nodes[i].child1 != 0
-        {
-            largest = vec_of_nodes[i].child1
-        }
-        if vec_of_nodes[largest].value < vec_of_nodes[vec_of_nodes[i].child2].value
-            && vec_of_nodes[i].child2 != 0
-        {
-            largest = vec_of_nodes[i].child2
+        let len = vec_of_nodes.len();
+        println!("{len}");
+        if vec_of_nodes.len() >= vec_of_nodes[i].child1 {
+            if vec_of_nodes[i].value < vec_of_nodes[vec_of_nodes[i].child1].value
+                && vec_of_nodes[i].child1 != 0
+            {
+                largest = vec_of_nodes[i].child1
+            }
+            if vec_of_nodes.len() > vec_of_nodes[i].child2 {
+                if vec_of_nodes[largest].value < vec_of_nodes[vec_of_nodes[i].child2].value
+                    && vec_of_nodes[i].child2 != 0
+                {
+                    largest = vec_of_nodes[i].child2
+                }
+            }
         }
         if largest != i {
             let placeholder = vec_of_nodes[i].value;
@@ -135,6 +141,7 @@ fn main() {
         }
         return vec_of_nodes;
     }
+
     fn max_heap(mut vec_of_nodes: Vec<Node>) -> Vec<Node> {
         let last_subtree: f32 = (vec_of_nodes.len() / 2) as f32;
         let last_subtree_int = last_subtree.floor() as i32;
@@ -144,18 +151,34 @@ fn main() {
         }
         return vec_of_nodes;
     }
-    // for Node in &nodes {
-    //     println!(
-    //         "parant = {}, child1 = {}, child 2 = {}, value = {}",
-    //         Node.parent, Node.child1, Node.child2, Node.value
-    //     );
-    // }
-    let new_nodes = max_heap(nodes);
+    fn sort(mut vec_of_nodes: Vec<Node>) -> Vec<i32> {
+        let mut sorted_nodes: Vec<i32> = vec![];
+        for i in 0..vec_of_nodes.len() {
+            let len = vec_of_nodes.len() - 1;
+            vec_of_nodes.swap(0, len);
+            let removed_element = vec_of_nodes[len].value;
+            vec_of_nodes.remove(len);
+            sorted_nodes.push(removed_element);
+            // for Node in &vec_of_nodes {
+            //     println!(
+            //         "parant = {}, child1 = {}, child 2 = {}, value = {}",
+            //         Node.parent, Node.child1, Node.child2, Node.value
+            //     );
+            // }
 
+            if len > 0 {
+                vec_of_nodes = hepify(vec_of_nodes, 0);
+            }
+        }
+        return sorted_nodes;
+    }
+    let new_nodes = max_heap(nodes);
     for Node in &new_nodes {
         println!(
             "parant = {}, child1 = {}, child 2 = {}, value = {}",
             Node.parent, Node.child1, Node.child2, Node.value
         );
     }
+    let sorted_nodes = sort(new_nodes);
+    println!("{:?}", sorted_nodes);
 }
